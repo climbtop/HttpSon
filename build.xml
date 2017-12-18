@@ -1,0 +1,42 @@
+﻿<?xml version="1.0"?>
+
+<project name="HttpSon" default="httpsession.jar" basedir=".">
+
+	<!-- dir/file define -->
+	<property name="build.dir" value="WebRoot/WEB-INF/classes"/>
+	<property name="dist.dir" value="dist"/>
+	<property name="dist.jar" value="httpsession.jar"/>
+
+	<target name="prepare">
+		<mkdir dir="${dist.dir}"/>
+		<delete>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.jar}"/>
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="httpsession.jar" depends="prepare">
+		<jar jarfile="${dist.dir}/${dist.jar}">
+			<fileset dir="${build.dir}">
+				<exclude name="com/core/**"/>
+				<exclude name="*.properties"/>
+			</fileset>
+		</jar>
+		<copy file="${dist.dir}/${dist.jar}"
+			  todir="../MailTrack/lib"/>
+		<copy file="${dist.dir}/${dist.jar}"
+			  todir="../WebTest/WebRoot/WEB-INF/lib"/>
+		<copy file="${dist.dir}/${dist.jar}"
+			  todir="../WebHome/WebRoot/WEB-INF/lib"/>
+		<copy file="${dist.dir}/${dist.jar}"
+			  todir="../WebMall/WebRoot/WEB-INF/lib"/>
+		<copy file="${dist.dir}/${dist.jar}"
+			  todir="../WebApi/WebRoot/WEB-INF/lib"/>
+		<copy file="${dist.dir}/${dist.jar}"
+			  todir="../WebPush/WebRoot/WEB-INF/lib"/>
+		<copy file="${dist.dir}/${dist.jar}"
+			  todir="../Tracker/lib"/>
+	</target>
+	
+</project>

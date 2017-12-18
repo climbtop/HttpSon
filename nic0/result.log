@@ -1,0 +1,2 @@
+2010-05-10 17:01:06,125 [INFO ] - [HttpMethodDirector] I/O exception (java.net.ConnectException) caught when processing request: Connection timed out: connect
+2010-05-10 17:01:06,125 [INFO ] - [HttpMethodDirector] Retrying request
