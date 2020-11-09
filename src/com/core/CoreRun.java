@@ -9,7 +9,6 @@ import com.common.FileUtil;
 import com.httpclient.HttpData;
 import com.httpclient.HttpSession;
 import com.listener.AppEngine;
-import com.listener.DetectListener;
 
 
 class HttpDataTest extends HttpData{
@@ -157,5 +156,5 @@ public class CoreRun implements AppEngine{
 			e.printStackTrace();
 		}
 	}
-	private static Logger log = Logger.getLogger(DetectListener.class);
+	private static Logger log = Logger.getLogger(HttpDataTest.class);
 }
