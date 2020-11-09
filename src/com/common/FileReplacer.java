@@ -14,6 +14,7 @@ public class FileReplacer {
 	private String replaceFileTmp = ".rtmp";
 	private String replaceFileEnc = "gbk";
 	private Set<String> defaultExtSet = new HashSet<String>();
+	private Set<String> designedExtSet = new HashSet<String>();
 
 	public FileReplacer() {
 		initDefaultExtSet();
@@ -21,13 +22,17 @@ public class FileReplacer {
 
 	public static void main(String[] args) throws Exception {
 		FileReplacer fr = new FileReplacer();
-		String replaceFileEnc = (args.length > 3 ? args[3] : fr.replaceFileEnc);
+		replace(fr, args);
+	}
+	
+	public static void replace(FileReplacer fr, String[] args) throws Exception {
+		fr.replaceFileEnc = (args.length > 3 ? args[3] : fr.replaceFileEnc);
 		if (args.length > 2) {
 			if (!new File(args[2]).exists()) {
 				args[2] = "./" + args[2];
 			}
 			System.out.println(String.format("args: %s\t%s\t%s\t%s", args[0],
-					args[1], args[2], replaceFileEnc));
+					args[1], args[2], fr.replaceFileEnc));
 			fr.replaceFolder(args[0], args[1], args[2]);
 		} else {
 			System.out
@@ -38,7 +43,7 @@ public class FileReplacer {
 	public void replaceFolder(String oldWord, String newWord, String filePath)
 			throws Exception {
 		File folder = new File(filePath);
-		if (!folder.exists())
+		if (oldWord.length()<=0 || !folder.exists())
 			return;
 		if (folder.isFile()) {
 			replaceFile(oldWord, newWord, filePath);
@@ -66,7 +71,7 @@ public class FileReplacer {
 		if (!oldFile.exists())
 			return;
 		String oldName = oldFile.getName();
-		if (oldName.indexOf(oldWord) >= 0) {
+		if (oldWord.length()>0 && oldName.indexOf(oldWord) >= 0) {
 			String newName = oldName.replace(oldWord, newWord);
 			if (!newName.equals(oldName)) {
 				File newFile = new File(oldFile.getParent() + "/" + newName);
@@ -78,7 +83,7 @@ public class FileReplacer {
 	public boolean replaceFile(String oldWord, String newWord, String filePath)
 			throws Exception {
 		File fileCur = new File(filePath);
-		if (!fileCur.exists())
+		if (oldWord.length()<=0 || !fileCur.exists())
 			return true;
 		String fileExt = fileCur.getName();
 		if (fileExt.endsWith(replaceFileTmp)
@@ -88,6 +93,10 @@ public class FileReplacer {
 		}
 		if (fileExt.indexOf(".") >= 0) {
 			fileExt = fileExt.substring(fileExt.lastIndexOf(".")).toLowerCase();
+			if(designedExtSet.size()>0 && !designedExtSet.contains(fileExt)){
+				System.out.println(filePath + "\t" + ("[IgnoredIt]"));
+				return true;
+			}
 			if (defaultExtSet.contains(fileExt)) {
 				System.out.println(filePath + "\t" + ("[IgnoredIt]"));
 				return true;
@@ -111,7 +120,7 @@ public class FileReplacer {
 		return true;
 	}
 
-	private class ReplaceKit {
+	public static class ReplaceKit {
 		int p = 0;
 		InputStream is;
 		OutputStream os;
@@ -170,6 +179,14 @@ public class FileReplacer {
 		public boolean isHasMatch() {
 			return hasMatch;
 		}
+	}
+
+	public Set<String> getDesignedExtSet() {
+		return designedExtSet;
+	}
+
+	public void setDesignedExtSet(Set<String> designedExtSet) {
+		this.designedExtSet = designedExtSet;
 	}
 
 	public Set<String> getDefaultExtSet() {
