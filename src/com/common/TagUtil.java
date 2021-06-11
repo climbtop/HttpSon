@@ -27,6 +27,7 @@ public class TagUtil {
 	}
 
 	private static Character stopChar(Character startChar) {
+		if(startChar==null) return null;
 		for (int j = 0; j < startChars.length; j++) {
 			if (startChar.equals(startChars[j]) && j < stopChars.length) {
 				return stopChars[j];
