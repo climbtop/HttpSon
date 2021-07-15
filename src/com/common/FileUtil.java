@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -142,10 +143,41 @@ public class FileUtil {
 		return "";
 	}
 	
+	/**
+	 * 读取LocalFile From InputStream
+	 * @param inputStream
+	 * @param enc
+	 * @return
+	 */
+	public static LinkedList<String> readFile(InputStream inputStream, String enc){
+		LinkedList<String> localFileList = new LinkedList<String>();
+		if(inputStream==null) return localFileList;
+		try{
+			Reader fr = enc == null ?
+					new InputStreamReader(inputStream) :
+					new InputStreamReader(inputStream, enc);
+
+			BufferedReader br = new BufferedReader(fr);
+			String line = "";
+			while((line=br.readLine())!=null){
+				if(line.trim().length()>0){
+					localFileList.addLast(line.trim());
+				}
+			}
+			br.close();
+			fr.close();
+		}catch(Exception e){
+		}
+		return localFileList;
+	}
+	public static LinkedList<String> readFile(InputStream inputStream){
+		return readFile(inputStream, null);
+	}
 	
 	/**
 	 * 读取LocalFile From File
 	 * @param filePath
+	 * @param enc
 	 * @return
 	 */
 	public static LinkedList<String> readFile(String filePath, String enc){
@@ -166,9 +198,6 @@ public class FileUtil {
 			br.close();
 			fr.close();
 		}catch(Exception e){
-			//InputStream in = new FileInputStream(new File(""));
-			//Reader isr = new InputStreamReader(in,"GBK");
-			//BufferedReader br = new BufferedReader(isr);
 		}
 		return localFileList;
 	}
@@ -231,11 +260,35 @@ public class FileUtil {
 		return null;
 	}
 	
+	/**
+	 * 保存LocalFile To OutputStream
+	 * @param localFileList
+	 * @param enc
+	 */
+	public static void writeFile(OutputStream outputSteram, List<String> localFileList, String enc){
+		try {
+			Writer fw = enc == null ?
+					new OutputStreamWriter (outputSteram) :
+					new OutputStreamWriter (outputSteram, enc);
+			
+			PrintWriter printWriter = new PrintWriter(new BufferedWriter(fw));
+			for(String localFile : localFileList){
+				printWriter.println(localFile);
+			}
+			printWriter.flush();
+			printWriter.close();
+		} catch (Exception e) {
+
+		}
+	}
+	public static void writeFile(OutputStream outputSteram, List<String> localFileList){
+		writeFile(outputSteram, localFileList, null);
+	}
 	
 	/**
 	 * 保存LocalFile To File
-	 * @param confirmLink
-	 * @param flag
+	 * @param localFileList
+	 * @param enc
 	 */
 	public static void writeFile(String filePath, List<String> localFileList, String enc){
 		try {
