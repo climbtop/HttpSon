@@ -6,6 +6,16 @@ import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * 关于HTTP的工具类
@@ -105,5 +115,32 @@ public class HttpUtil {
 		}
 		return flag;
 	}
+	
+	public void setHttpSSLNoVerifier(HttpsURLConnection connection) {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[1];
+            trustAllCerts[0] = new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+                }
+                public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+                }
+            };
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, null);
+            SSLSocketFactory sslSocketFactory = sc.getSocketFactory();
+            connection.setSSLSocketFactory(sslSocketFactory);
+
+            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+                public boolean verify(String urlHostName, SSLSession session) {
+                    return true;
+                }
+            };
+            connection.setHostnameVerifier(hostnameVerifier);
+        } catch (Exception e) {
+        }
+    }
 	
 }
