@@ -83,4 +83,10 @@ public class ThreadPoolUtil {
 	public ThreadPoolExecutor getExecutor() {
 		return executor;
 	}
+	
+	public void shutdown() {
+		if (executor != null) {
+			executor.shutdown();
+		}
+	}
 }
