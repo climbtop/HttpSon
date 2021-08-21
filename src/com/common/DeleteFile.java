@@ -1,13 +1,3 @@
-/**
- * 文   件：	DeleteFile.java
- * 创建日期：	2009-06-16
- * 文件说明：	
- * 创 建 者：朱孙盛
- * 重大修改记录：
- * 			2009-06-16 by 朱孙盛 ： 创建
- * 
- * Copyright (C) 2008 - 版权所有   2008 21CN Corp. Ltd
- */
 package com.common;
 
 import java.io.File;

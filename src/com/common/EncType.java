@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 判断文件编码格式
+ * 文件格式
  */
 public class EncType {
 
