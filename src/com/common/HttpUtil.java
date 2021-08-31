@@ -116,7 +116,7 @@ public class HttpUtil {
 		return flag;
 	}
 	
-	public void setHttpSSLNoVerifier(HttpsURLConnection connection) {
+	public static void setHttpSSLNoVerifier(HttpsURLConnection connection) {
         try {
             TrustManager[] trustAllCerts = new TrustManager[1];
             trustAllCerts[0] = new X509TrustManager() {
