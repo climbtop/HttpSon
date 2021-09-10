@@ -8,18 +8,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadPoolUtil {
-
+	public static int CORE_POOL_SIZE = 0;
 	private static volatile ThreadPoolUtil mInstance;
+	
 	private int corePoolSize;
 	private int maxPoolSize;
-	private long keepAliveTime = 1;
-	private TimeUnit unit = TimeUnit.HOURS;
+	private long keepAliveTime = 20;
+	private TimeUnit unit = TimeUnit.MINUTES;
 
 	private ThreadPoolExecutor executor;
 
 	private ThreadPoolUtil() {
-		corePoolSize = Runtime.getRuntime().availableProcessors() * 2 + 1;
+		corePoolSize = getCpuCount() * 2 + 1;
 		maxPoolSize = corePoolSize;
+		if (CORE_POOL_SIZE >= 12) {
+			maxPoolSize = CORE_POOL_SIZE;
+			corePoolSize = CORE_POOL_SIZE;
+		}
 		executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, unit,
 				new LinkedBlockingQueue<Runnable>(), new DefaultThreadFactory(Thread.NORM_PRIORITY, "thread-pool-"),
 				new ThreadPoolExecutor.AbortPolicy());
@@ -88,5 +93,9 @@ public class ThreadPoolUtil {
 		if (executor != null) {
 			executor.shutdown();
 		}
+	}
+	
+	public int getCpuCount() {
+		return Runtime.getRuntime().availableProcessors();
 	}
 }
