@@ -46,6 +46,9 @@ public class IpMacUtil {
 						|| !netInterface.isUp()) {
 					continue;
 				} else {
+					if(netInterface.isVirtual() || netInterface.getDisplayName().contains("Virtual")) {
+						continue;
+					}
 					Enumeration<InetAddress> addresses = netInterface.getInetAddresses();
 					while (addresses.hasMoreElements()) {
 						ip = addresses.nextElement();
