@@ -29,6 +29,8 @@ public class ConfigArgs {
 			Reader r = new InputStreamReader(new FileInputStream(ARGS_CONFIG), "GBK");
 			int t;
 			while ((t = r.read()) != -1) {
+				if(t==10 || t==13) 
+					break;
 				if (t == 65279)
 					continue;
 				char c = (char) t;
