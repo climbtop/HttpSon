@@ -1,5 +1,6 @@
 package com.common;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.DatagramSocket;
 import java.net.HttpURLConnection;
@@ -142,5 +143,51 @@ public class HttpUtil {
         } catch (Exception e) {
         }
     }
+	
+	public static byte[] readFromURL(String urlStr) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HttpURLConnection connection = null;
+        InputStream stream = null;
+        try {
+        	URL url = new URL(urlStr);
+            connection = (HttpURLConnection) url.openConnection();
+            if(urlStr.toLowerCase().startsWith("https")) {
+            	setHttpSSLNoVerifier((HttpsURLConnection) connection);
+            }
+            connection.setReadTimeout(30000);
+            connection.setConnectTimeout(5000);
+            connection.setRequestMethod("GET");
+            connection.connect();
+            int responseCode = connection.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+            	return baos.toByteArray();
+            }
+            stream = connection.getInputStream();
+            if (stream != null) {
+            	byte[] b=new byte[1024];
+            	int z;
+            	  while((z=stream.read(b, 0, b.length))!=-1){
+            		  baos.write(b, 0, z);
+            	  }
+            }
+        } catch(Exception e) {
+        	e.printStackTrace();
+        	return baos.toByteArray();
+        } finally {
+			if (stream != null) {
+				try {
+					stream.close();
+				} catch (Exception e) {
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.disconnect();
+				} catch (Exception e) {
+				}
+			}
+        }
+        return baos.toByteArray();
+	}
 	
 }
