@@ -93,8 +93,7 @@ public abstract class  HttpData implements Serializable{
 	}
 	
 	public String getPostData() {
-		if(postOriginalData!=null //首先返回直接的最原始数据.
-				&& postOriginalData.length()>0){
+		if(hasOriginalData()) { //首先返回直接的最原始数据.
 			return postOriginalData;
 		}
 		StringBuffer sb = new StringBuffer("");
@@ -106,6 +105,10 @@ public abstract class  HttpData implements Serializable{
 					+ (value != null ? value : ""));
 		}
 		return sb.toString();
+	}
+	
+	public boolean hasOriginalData() {
+		return postOriginalData!=null && postOriginalData.length()>0;
 	}
 	
 	public String getEncodeData() {
