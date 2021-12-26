@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -26,9 +25,9 @@ public abstract class  HttpData implements Serializable{
 	private String postMethod = "GET";
 	private String encoding = "GBK"; //下载内容编码方式
 	private String postDataEncoding = ""; //POST内容编码方式
-	private Map<String, String> postData = new HashMap<String, String>();
-	private Map<String,String> requestHeader = new HashMap<String,String>(); //存储的请求Header
-	private Map<String,String> responseHeader = new HashMap<String,String>(); //存储的响应Header
+	private Map<String, String> postData = new LinkedHashMap<String, String>();
+	private Map<String,String> requestHeader = new LinkedHashMap<String,String>(); //存储的请求Header
+	private Map<String,String> responseHeader = new LinkedHashMap<String,String>(); //存储的响应Header
 	private List<String> urlTraces = new LinkedList<String>(); //跳转轨迹
 	private int maxUrlTraces = 0; //最大跳转次数
 	//readable
@@ -96,6 +95,10 @@ public abstract class  HttpData implements Serializable{
 		if(hasOriginalData()) { //首先返回直接的最原始数据.
 			return postOriginalData;
 		}
+		return getPostData(postData);
+	}
+	
+	public String getPostData(Map<String, String> postData) {
 		StringBuffer sb = new StringBuffer("");
 		for (String key : postData.keySet()) {
 			String value = postData.get(key);
