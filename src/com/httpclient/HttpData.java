@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,8 +27,8 @@ public abstract class  HttpData implements Serializable{
 	private String encoding = "GBK"; //下载内容编码方式
 	private String postDataEncoding = ""; //POST内容编码方式
 	private Map<String, String> postData = new LinkedHashMap<String, String>();
-	private Map<String,String> requestHeader = new LinkedHashMap<String,String>(); //存储的请求Header
-	private Map<String,String> responseHeader = new LinkedHashMap<String,String>(); //存储的响应Header
+	private Map<String,String> requestHeader = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER); //存储的请求Header
+	private Map<String,String> responseHeader = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER); //存储的响应Header
 	private List<String> urlTraces = new LinkedList<String>(); //跳转轨迹
 	private int maxUrlTraces = 0; //最大跳转次数
 	//readable
