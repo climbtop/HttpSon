@@ -37,7 +37,7 @@ public class HttpSession implements HttpHelper{
 	private static MultiThreadedHttpConnectionManager conManager = 
         new MultiThreadedHttpConnectionManager();//多线程时使用
 	static{
-		Protocol myhttps = new Protocol("https",new MySecureProtocolSocketFactory(), 443);
+		Protocol myhttps = new Protocol("https",new HttpSecureProtocolSocketFactory(), 443);
 		Protocol.registerProtocol("https", myhttps);
 	}
 	//多线程管理器参数设定
