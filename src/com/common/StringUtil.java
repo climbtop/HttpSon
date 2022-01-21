@@ -155,7 +155,7 @@ public class StringUtil {
 	/**
 	 * 异常转化为字符串
 	 */
-	public static final String getStackTrace(Throwable e, String cs) {
+	public static final String getStackTrace(Throwable e) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
