@@ -1,5 +1,7 @@
 package com.common;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -139,4 +141,24 @@ public class StringUtil {
 		return !isEmpty(s);
 	}
 	
+	/**
+	 * 获取固定长度数字字符串
+	 */
+	public static String getFixedLength(int num, int len) {
+		String result = String.valueOf(num);
+		while (result.length() < len) {
+			result = ("0" + result);
+		}
+		return result;
+	}
+	
+	/**
+	 * 异常转化为字符串
+	 */
+	public static final String getStackTrace(Throwable e, String cs) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		return sw.toString();
+	}
 }
