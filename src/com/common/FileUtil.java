@@ -36,7 +36,7 @@ import java.util.Map;
 public class FileUtil {
 	
 	/**
-	 * 查找相同目录下的文件,按照YYYY.1234834241979.xml格式时间序号返回.
+	 * 查找相同目录下的文件,按照时间序号返回.
 	 * @param localFile
 	 */
 	public  static LinkedList<String> findDirectoryFiles(String localFile) {
@@ -82,7 +82,7 @@ public class FileUtil {
 	}
 	
 	/**
-	 * 率选(文件名-文件路径)，按照特定格式序号返回.
+	 * 筛选(文件名-文件路径)，按照特定格式序号返回.
 	 * @param namePathMap
 	 * @return
 	 */
@@ -211,6 +211,7 @@ public class FileUtil {
 	public static List<String> readLocalFile(String filePath){
 		return readLocalFile(filePath, null);
 	}
+	
 	/**
 	 * 读取LocalFile to Map
 	 * @param filePath
@@ -219,6 +220,7 @@ public class FileUtil {
 	public static HashSet<String> readLocalFileToMap(String filePath){
 		return new HashSet<String>(readLocalFile(filePath));
 	}
+	
 	/**
 	 * 读取LocalFile to Byte
 	 * @param filePath
@@ -246,6 +248,33 @@ public class FileUtil {
         }
 		return data;
 	}
+	
+	/**
+	 * 读取LocalFile to Byte
+	 * @param inputstream
+	 * @param enc
+	 * @return
+	 */
+	public static byte[] readLocalFileToByte(InputStream fin){
+		byte[] data = null;
+        try {
+            ByteArrayOutputStream bStrm = new ByteArrayOutputStream();   
+            int ch;   
+            while ((ch = fin.read()) != -1){   
+                bStrm.write(ch);   
+            }
+			fin.close();
+			data = bStrm.toByteArray();   
+            bStrm.close(); 
+		}catch(Exception e){
+        }finally{
+        	if(fin!=null) {
+        		try{fin.close();}catch(Exception e){}
+        	}
+        }
+		return data;
+	}
+	
 	/**
 	 * 读取LocalFile to String
 	 * @param filePath
@@ -255,6 +284,20 @@ public class FileUtil {
 	public static String readLocalFileToString(String filePath,String enc){
 		try {
 			return new String(readLocalFileToByte(filePath),enc);
+		} catch (Exception e) {
+		}
+		return null;
+	}
+	
+	/**
+	 * 读取LocalFile to String
+	 * @param inputStream
+	 * @param enc
+	 * @return
+	 */
+	public static String readLocalFileToString(InputStream inputStream,String enc){
+		try {
+			return new String(readLocalFileToByte(inputStream),enc);
 		} catch (Exception e) {
 		}
 		return null;
@@ -317,6 +360,12 @@ public class FileUtil {
 		writeLocalFile(filePath, localFileList, null);
 	}
 	
+	/**
+	 * 保存ByteData To File
+	 * @param filePath
+	 * @param data
+	 * @param append
+	 */
 	public static void writeLocalFileForByte(String filePath, byte[] data, boolean append){
 		ByteArrayInputStream iStrm = null;  
         FileOutputStream fout = null;
@@ -336,12 +385,36 @@ public class FileUtil {
         	}
         }
 	}
+	public static void writeLocalFileForByte(OutputStream fout, byte[] data, boolean append){
+		ByteArrayInputStream iStrm = null;
+        try {  
+            iStrm = new ByteArrayInputStream(data);
+            int ch;   
+            while ((ch = iStrm.read()) != -1){   
+            	fout.write(ch);   
+            }
+            fout.close();
+            iStrm.close();
+		}catch(Exception e){
+        }finally{
+        	if(fout!=null) {
+        		try{fout.close();}catch(Exception e){}
+        	}
+        }
+	}
+	
 	public static void writeLocalFileForByte(String filePath, byte[] data){
 		writeLocalFileForByte(filePath, data, false);
 	}
 	public static void writeLocalFileForString(String filePath, String data,String enc){
 		try {
 			writeLocalFileForByte(filePath, data.getBytes(enc), false);
+		} catch (Exception e) {
+		}
+	}
+	public static void writeLocalFileForString(OutputStream outputStream, String data,String enc){
+		try {
+			writeLocalFileForByte(outputStream, data.getBytes(enc), false);
 		} catch (Exception e) {
 		}
 	}
