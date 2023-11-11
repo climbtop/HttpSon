@@ -94,12 +94,20 @@ public class ConfigArgs {
 		String[] newArgs = new String[argsList.size()];
 		for (int i = 0; i < argsList.size(); i++) {
 			newArgs[i] = argsList.get(i);
+			newArgs[i] = fmtArgsPwd(newArgs[i]);
 			System.out.print(newArgs[i] + " ");
 		}
 		System.out.println();
 		return newArgs;
 	}
 
+	private static String fmtArgsPwd(String newArgs) {
+		if(newArgs==null || !newArgs.toUpperCase().contains("${WORKDIR}"))  return newArgs;
+		String argsPwd = (ARGS_CONFIG.contains("/")?
+				ARGS_CONFIG.substring(0, ARGS_CONFIG.lastIndexOf("/")):".");
+		return newArgs.replace("${WORKDIR}", argsPwd).replace("${workdir}", argsPwd);
+	}
+	
 	private static boolean fileExists(String confFile) {
 		return confFile != null && (confFile.contains("://") || new File(confFile).exists());
 	}
